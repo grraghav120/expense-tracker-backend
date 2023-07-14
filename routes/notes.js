@@ -17,7 +17,7 @@ router.post("/SIGN_UP", (req, res, next) => {
         status: true,
         data: {
           username: result.username,
-          gmail: result.username,
+          gmail: result.gmail,
           userId: result._id,
         },
       });
