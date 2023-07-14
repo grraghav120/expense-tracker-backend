@@ -16,6 +16,6 @@ const NotesUser = mongoose.Schema({
   userData:[createNote],
 });
 
-userSchmema.plugin(uniqueValidator);
+NotesUser.plugin(uniqueValidator);
 
 module.exports = mongoose.model("NotesUser", NotesUser);
