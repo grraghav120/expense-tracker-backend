@@ -6,6 +6,8 @@ const bodyParser = require("body-parser"); //imnport body-parser
 
 const userRoutes=require('./routes/user');
 const expenseRoutes=require('./routes/expense');
+const NotesRoutes=require('./routes/notes');
+const NotesUses=require('./routes/notescrud');
 
 const mongoose = require("mongoose");
 mongoose.connect('mongodb+srv://root:'+process.env.MONGO_ATLAS_PW+'@cluster0.ywmh36y.mongodb.net/expenseTracker')
@@ -34,5 +36,7 @@ app.use((req, res, next) => {
 
 app.use('/v1/api',expenseRoutes);
 app.use('/v1/api/USER',userRoutes);
+app.use('/v1/api/USERNOTES',NotesRoutes);
+app.use('/v1/api/NOTES',NotesUses);
 
 module.exports = app;
