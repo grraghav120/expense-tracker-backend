@@ -8,7 +8,7 @@ const userRoutes=require('./routes/user');
 const expenseRoutes=require('./routes/expense');
 
 const mongoose = require("mongoose");
-mongoose.connect('mongodb+srv://root:'+process.env.MONGO_ATLAS_PW+'@cluster0.ywmh36y.mongodb.net/expenseTracker')
+mongoose.connect('mongodb+srv://'+process.env.MONGO_ATLAS_USERNAME+':'+process.env.MONGO_ATLAS_PW+'@cluster0.ywmh36y.mongodb.net/'+process.env.MONGO_ATLAS_DATABASE_NAME)
 .then(()=>{
   console.log("Connected to database");
 })

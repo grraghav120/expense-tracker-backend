@@ -8,6 +8,9 @@ const http = require("http"); // nodejs package . require keyword to import the 
 const debug = require("debug")("node-angular");
 
 const app = require("./app"); //import express app
+
+require('dotenv').config(); // to use env variables
+
 const normalizePort = (val) => {
   var port = parseInt(val, 10);
 
@@ -49,7 +52,7 @@ const onListening = () => {
   debug("Listening on " + bind);
 };
 
-const port = normalizePort(process.env.PORT || "3000");
+const port = normalizePort(process.env.PORT);
 app.set("port", port);
 
 const server = http.createServer(app);

@@ -1,6 +1,7 @@
 const express = require("express");
 
 const UserModel = require("../models/userModel");
+const UserFeedback = require("../models/usersFeedback");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"); // To generate Token
@@ -88,6 +89,7 @@ router.post("/LOGIN", (req, res, next) => {
               latestLoginDate: new Date(),
               userId: user._id,
               expiredToken:3600,
+              email:user.gmail,
             },
             status: true,
           });
@@ -138,5 +140,60 @@ router.get("/APP_VERSION", (req, res, next) => {
   });
 });
 
+router.post("/USER_FEEDBACK", authMiddleware, (req, res, next) => {
+  const newFeedback = new UserFeedback({
+    userId:req.body.userId,
+    email:req.body.email,
+    rating:req.body.rating,
+    reason:req.body.reason,
+    createdAt:req.body.createdAt,
+  });
+
+  newFeedback.save()
+  .then((result)=>{
+    res.status(200).json({
+      message:'FeedBack Added',
+      data:{result},
+      status:true,
+    })
+  }).catch((err)=>{
+    res.status(501).json({
+      message:err,
+      status:false,
+    });
+  });
+});
+
+router.post("/CONFIRM_ACCESS",authMiddleware, (req, res, next) => {
+  UserModel.findOne({ gmail: req.body.gmail })
+    .then((user) => {
+      bcrypt
+        .compare(req.body.password, user.password)
+        .then((validate) => {
+          if (!validate) {
+            return res.status(401).json({
+              message: "Invalid Password",
+              status: false,
+            });
+          }
+          res.status(200).json({
+            message: "Valid Password",
+            status: true,
+          });
+        })
+        .catch((err) => {
+          return res.status(401).json({
+            message: "Something Went Wrong! Please Try Again",
+            status: false,
+          });
+        });
+    })
+    .catch((err) => {
+      return res.status(401).json({
+        message: "Something Weird! Please Try Again",
+        status: false,
+      });
+    });
+});
 
 module.exports = router;
