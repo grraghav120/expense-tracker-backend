@@ -1,6 +1,7 @@
 const express = require("express");
 const CreateExpense = require("../models/createExpense"); //import the Schema of Create Expense\
 const SaveData=require('../models/saveData');
+const userSource = require('../models/userSource');
 const router = express.Router();
 
 const UserModel=require('../models/userModel');
@@ -267,5 +268,19 @@ router.get('/get_all_users', async (req,res,next)=>{
   return res.json({ msg: "Posts Fetched successfully", data: result });
 })
 
+
+router.get('/GET_ALL_SOURCE',(req,res,next)=>{
+  userSource.find().then((res)=>{
+    res.status(200).json({
+      data:res,
+      status: true,
+    });
+  }).catch((err) => {
+    res.status(501).json({
+      message: err,
+      status: false,
+    });
+  });  
+})
 
 module.exports = router;

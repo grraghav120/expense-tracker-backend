@@ -2,6 +2,7 @@ const express = require("express");
 
 const UserModel = require("../models/userModel");
 const UserFeedback = require("../models/usersFeedback");
+const UserSource = require("../models/userSource");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"); // To generate Token
@@ -109,7 +110,7 @@ router.post("/LOGIN", (req, res, next) => {
     });
 });
 
-router.delete("/DELETE_ACCOUNT/:id", (req, res, next) => {
+router.delete("/DELETE_ACCOUNT/:id", authMiddleware,(req, res, next) => {
   UserModel.findOneAndDelete({ _id: req.params.id })
     .then((result) => {
       if (!result) {
@@ -135,7 +136,7 @@ router.delete("/DELETE_ACCOUNT/:id", (req, res, next) => {
 router.get("/APP_VERSION", (req, res, next) => {
   res.status(200).json({
     message:'App Version successfully fetched',
-    version:'v1.1.0',
+    version:'v1.2.0',
     status:true,
   });
 });
@@ -195,5 +196,29 @@ router.post("/CONFIRM_ACCESS",authMiddleware, (req, res, next) => {
       });
     });
 });
+
+router.post('/USER_SOURCE',(req,res,next) => {
+  const sourceBody = new UserSource({
+    userId:req.body.userId,
+    email:req.body.email,
+    source:req.body.source,
+    createdAt:req.body.createdAt,
+  });
+
+  sourceBody.save()
+  .then((result)=>{
+    res.status(200).json({
+      message:'Source Added',
+      data:{result},
+      status:true,
+    })
+  }).catch((err)=>{
+    res.status(501).json({
+      message:err,
+      status:false,
+    });
+  });
+})
+
 
 module.exports = router;

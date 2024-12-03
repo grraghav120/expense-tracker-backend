@@ -6,7 +6,7 @@ const bodyParser = require("body-parser"); //imnport body-parser
 
 const userRoutes=require('./routes/user');
 const expenseRoutes=require('./routes/expense');
-
+const adminRoutes = require('./routes/admin');
 const mongoose = require("mongoose");
 mongoose.connect('mongodb+srv://'+process.env.MONGO_ATLAS_USERNAME+':'+process.env.MONGO_ATLAS_PW+'@cluster0.ywmh36y.mongodb.net/'+process.env.MONGO_ATLAS_DATABASE_NAME)
 .then(()=>{
@@ -34,5 +34,5 @@ app.use((req, res, next) => {
 
 app.use('/v1/api',expenseRoutes);
 app.use('/v1/api/USER',userRoutes);
-
+app.use('/v2/api/ADMIN',adminRoutes);
 module.exports = app;
