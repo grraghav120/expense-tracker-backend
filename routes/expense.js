@@ -98,29 +98,6 @@ router.post("/CREATE_EXPENSE", authMiddleware, (req, res, next) => {
   });
 });
 
-router.post('/SAVE_DATA',(req,res,next)=>{
-  const allData=new SaveData({
-    username:req.body.username,
-    name:req.body.name,
-    firstLoginDate:req.body.firstLoginDate,
-    lastLoginDate:req.body.lastLoginDate,
-    userId:req.body.userId,
-    expenseLogged:req.body.expenseLogged,
-  });
-  UserModel.updateOne({_id:req.body.userId},{
-    $push: { userData: allData }
-  }).then((result)=>{
-    res.status(200).json({
-      message:'Save',
-      status:true,
-    })
-  }).catch((err)=>{
-    res.status(501).json({
-      message:err,
-      status:false,
-    });
-  });
-});
 
 router.get('/GET_SAVE_DATA/:id',(req,res,next)=>{
   UserModel.findOne({ _id: req.params.id },).then((user)=>{
