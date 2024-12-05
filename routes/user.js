@@ -110,7 +110,7 @@ router.post("/LOGIN", (req, res, next) => {
     });
 });
 
-router.delete("/DELETE_ACCOUNT/:id", authMiddleware,(req, res, next) => {
+router.delete("/DELETE_ACCOUNT/:id",(req, res, next) => {
   UserModel.findOneAndDelete({ _id: req.params.id })
     .then((result) => {
       if (!result) {
