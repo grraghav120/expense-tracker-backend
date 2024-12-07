@@ -52,37 +52,4 @@ router.post("/ADMIN_LOGIN", (req, res, next) => {
         });
       });
 });
-
-
-router.post("/ADMIN_SIGN_UP", (req, res, next) => {
-    bcrypt
-      .hash(req.body.password, 10)
-      .then((hash) => {
-        const User = new AdminModel({
-          email: req.body.email,
-          password: hash, //the password should be encrypted so that no one can access the user account not even us(Admin)
-          createdAt:req.body.createdAt
-        });
-        User.save()
-          .then((result) => {
-            res.status(200).json({
-              message: "Account Created",
-              status: true,
-            });
-          })
-          .catch((err) => {
-            console.error(err);
-            res.status(500).json({
-              message: 'Failed to create user',
-              error: err.message,
-            });
-          });
-      })
-      .catch((err) => {
-        res.status(500).json({
-          error: err.message,
-        });
-      });
-});
-
 module.exports = router
