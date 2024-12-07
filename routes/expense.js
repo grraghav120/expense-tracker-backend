@@ -7,6 +7,7 @@ const router = express.Router();
 const UserModel=require('../models/userModel');
 
 const authMiddleware=require('../middleware/expenseMiddleWare');
+const adminMiddleware = require('../middleware/adminMiddleWare');
 
 router.delete("/DELETE_EXPENSE/:userId/:id", authMiddleware, (req, res, next) => {
   UserModel.findOneAndUpdate(
@@ -215,38 +216,14 @@ router.post('/UPDATE_NAME/:id',(req,res,next)=>{
 })
 
 
-//http://127.0.0.1:3000/v1/api/get_all_users
-router.get('/get_all_users', async (req,res,next)=>{
-  // const pageNumber = parseInt(req.query.pageNumber) || 0;
-  // const limit = parseInt(req.query.limit) || 12;
+router.get('/get_all_users',adminMiddleware, async (req,res,next)=>{
   const result = {};
-  // const totalPosts = 200;
-  // let startIndex = pageNumber * limit;
-  // const endIndex = (pageNumber + 1) * limit;
-  // result.totalPosts = totalPosts;
-  // if (startIndex > 0) {
-  //   result.previous = {
-  //     pageNumber: pageNumber - 1,
-  //     limit: limit,
-  //   };
-  // }
-  // if (endIndex < totalPosts) {
-  //   result.next = {
-  //     pageNumber: pageNumber + 1,
-  //     limit: limit,
-  //   };
-  // }
   result.data = await UserModel.find()
-  //   .sort("-_id")
-  //   .skip(startIndex)
-  //   .limit(limit)
-  //   .exec();
-  // result.rowsPerPage = limit;
   return res.json({ msg: "Posts Fetched successfully", data: result });
 })
 
 
-router.get('/GET_ALL_SOURCE',(req,res,next)=>{
+router.get('/GET_ALL_SOURCE',adminMiddleware,(req,res,next)=>{
   userSource.find().then((res)=>{
     res.status(200).json({
       data:res,
